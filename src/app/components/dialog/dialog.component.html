@@ -1,0 +1,18 @@
+<mat-dialog-content [formGroup]="editForm" *ngIf="editForm">
+  <mat-form-field>
+    <input matInput formControlName="firstName" placeholder="First Name" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="lastName" placeholder="Last Name" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="email" placeholder="Email" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="id" placeholder="ID" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="update()">Update</button>
+</mat-dialog-actions>

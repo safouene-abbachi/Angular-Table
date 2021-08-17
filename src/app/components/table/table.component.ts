@@ -1,15 +1,9 @@
-import {
-  AfterViewInit,
-  Component,
-  ViewChild,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from '../dialog/dialog.component';
 import { PersonService } from '../../../person.service';
-import { User } from '../../../models/users-model';
+import { IUser } from '../../../models/users-model';
 import { MatDialog } from '@angular/material/dialog';
 
 /**
@@ -20,7 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
-export class TableComponent implements AfterViewInit, OnInit {
+export class TableComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
     'firstName',
@@ -31,44 +25,36 @@ export class TableComponent implements AfterViewInit, OnInit {
   ];
   dataSource: any;
   user: any;
-  users: User[];
-  constructor(
-    private PersonService: PersonService,
-    private changeDetectorRefs: ChangeDetectorRef,
-    public dialog: MatDialog
-  ) {}
+  users: IUser[];
+  constructor(private PersonService: PersonService, public dialog: MatDialog) {}
   @ViewChild(MatSort) sort: MatSort;
 
-  ngOnInit() {
-    this.refresh();
-    this.PersonService.getUsers().subscribe((users: User[]) => {
+  private getUsers() {
+    this.PersonService.getUsers().subscribe((users: IUser[]) => {
       this.users = users;
       this.dataSource = new MatTableDataSource(users);
-      this.dataSource.sort = this.sort;
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+  ngOnInit() {
+    this.getUsers();
   }
 
   editUser(user: any): void {
+    const updatedPerson = this.dataSource.data;
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '250px',
       data: user,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
-      console.log('The dialog was closed');
-
-      const x = this.dataSource.data.filter((value, key) => {
-        if (value.id == result.id) {
-          value = result;
-        }
-        return true;
-      });
-      this.dataSource.data = x;
+      this.PersonService.updateUser(this.user).subscribe((response) =>
+        console.log(response)
+      );
+      // console.log('The dialog was closed');
+      // const index = this.dataSource.data.findIndex((el) => el.id === result.id);
+      // updatedPerson[index] = result;
+      // this.dataSource.data = updatedPerson;
     });
   }
 
@@ -77,11 +63,11 @@ export class TableComponent implements AfterViewInit, OnInit {
     this.dataSource.data = filtredData;
   }
 
-  refresh() {
-    this.PersonService.getUsers().subscribe((users: User[]) => {
-      this.users = users;
-      this.dataSource = new MatTableDataSource(users);
-      this.changeDetectorRefs.detectChanges();
+  removeProduct(user: IUser) {
+    const id = user.id;
+
+    this.PersonService.deleteUser(id).subscribe((user) => {
+      this.getUsers();
     });
   }
 }

@@ -1,7 +1,7 @@
 /**
  * User specification
  */
-export interface User {
+export interface IUser {
   /**
    * user ID
    */

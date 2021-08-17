@@ -1,36 +1,6 @@
 {
   "users": [
     {
-      "id": 789865426879,
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "john@gmail.com"
-    },
-    {
-      "id": 25454813554,
-      "firstName": "Steve",
-      "lastName": "jobs",
-      "email": "steve@gmail.com"
-    },
-    {
-      "id": 465465489863,
-      "firstName": "Mark",
-      "lastName": "zukerberg",
-      "email": "mark@gmail.com"
-    },
-    {
-      "id": 446532146421,
-      "firstName": "Phill",
-      "lastName": "collins",
-      "email": "phill@gmail.com"
-    },
-    {
-      "id": 48736131864,
-      "firstName": "Martin",
-      "lastName": "L.k",
-      "email": "martin@gmail.com"
-    },
-    {
       "id": 8964432135768,
       "firstName": "Rosa",
       "lastName": "Parks",

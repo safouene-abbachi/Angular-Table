@@ -1,10 +1,10 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { PersonService } from '../../../person.service';
 import { IUser } from '../../../models/users-model';
-import { MatDialog } from '@angular/material/dialog';
 
 /**
  * @title user table
@@ -29,7 +29,8 @@ export class TableComponent implements OnInit {
   constructor(private PersonService: PersonService, public dialog: MatDialog) {}
   @ViewChild(MatSort) sort: MatSort;
 
-  private getUsers() {
+  //Getting all users
+  getUsers() {
     this.PersonService.getUsers().subscribe((users: IUser[]) => {
       this.users = users;
       this.dataSource = new MatTableDataSource(users);
@@ -40,32 +41,25 @@ export class TableComponent implements OnInit {
     this.getUsers();
   }
 
+  //Editing user by it's ID (subscribing on closing dialog to execute update)
+
   editUser(user: any): void {
-    const updatedPerson = this.dataSource.data;
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '250px',
       data: user,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.PersonService.updateUser(this.user).subscribe((response) =>
-        console.log(response)
+      this.PersonService.updateUser(result).subscribe((response) =>
+        this.getUsers()
       );
-      // console.log('The dialog was closed');
-      // const index = this.dataSource.data.findIndex((el) => el.id === result.id);
-      // updatedPerson[index] = result;
-      // this.dataSource.data = updatedPerson;
     });
   }
 
-  deleteUser(index: number) {
-    const filtredData = this.dataSource.data.filter((el) => el.id !== index);
-    this.dataSource.data = filtredData;
-  }
+  //Deleting user by ID
 
-  removeProduct(user: IUser) {
+  deleteUser(user: IUser) {
     const id = user.id;
-
     this.PersonService.deleteUser(id).subscribe((user) => {
       this.getUsers();
     });

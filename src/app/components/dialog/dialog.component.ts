@@ -1,10 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 /**
  * @title Dialog Overview
  */
@@ -23,10 +19,12 @@ export class DialogComponent implements OnInit {
   ngOnInit() {
     this.initForm();
   }
-
+  //Close the dialog when clicking on cancel
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  //Creating a FormGroup for managing multiple inputs
   private initForm(): void {
     this.editForm = new FormGroup({
       firstName: new FormControl(this.data.firstName, [Validators.required]),
@@ -35,6 +33,8 @@ export class DialogComponent implements OnInit {
       id: new FormControl(this.data.id, [Validators.required]),
     });
   }
+
+  //Updating all the input data values when closing the dialog
   update() {
     console.log(this.editForm.value);
     this.dialogRef.close(this.editForm.value);
